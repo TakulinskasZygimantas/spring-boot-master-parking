@@ -1,7 +1,6 @@
 package com.zygtak.springbootmasterparking.dto;
 
 import java.sql.Time;
-import java.util.List;
 
 public class ParkingLotDTO {
 
@@ -15,6 +14,7 @@ public class ParkingLotDTO {
     private Time endOfTheWork;
     private int freeTime;
     private int parkingSpotsCount;
+    private int freeParkingSpotsCount;
 
     public int getId() {
         return id;
@@ -94,5 +94,13 @@ public class ParkingLotDTO {
 
     public void setParkingSpotsCount(int parkingSpotsCount) {
         this.parkingSpotsCount = parkingSpotsCount;
+    }
+
+    public int getFreeParkingSpotsCount() {
+        return freeParkingSpotsCount;
+    }
+
+    public void setFreeParkingSpotsCount(int freeParkingSpotsCount) {
+        this.freeParkingSpotsCount = freeParkingSpotsCount;
     }
 }

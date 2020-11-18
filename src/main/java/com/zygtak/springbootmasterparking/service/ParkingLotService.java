@@ -2,6 +2,7 @@ package com.zygtak.springbootmasterparking.service;
 
 import com.zygtak.springbootmasterparking.dto.ParkingLotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingLot;
+import com.zygtak.springbootmasterparking.entity.ParkingSpot;
 import com.zygtak.springbootmasterparking.repository.ParkingLotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class ParkingLotService {
                 parkingLotDTO.setEndOfTheWork(parkingLots.get(i).getEndOfTheWork());
                 parkingLotDTO.setFreeTime(parkingLots.get(i).getFreeTime());
                 parkingLotDTO.setParkingSpotsCount(parkingLots.get(i).getParkingSpots() != null ? parkingLots.get(i).getParkingSpots().size() : 0);
+                parkingLotDTO.setFreeParkingSpotsCount(parkingLots.get(i).getParkingSpots() != null ? countFreeParkingSpots(parkingLots.get(i).getParkingSpots()) : 0);
 
                 parkingLotDTOS.add(parkingLotDTO);
             }
@@ -59,6 +61,7 @@ public class ParkingLotService {
         parkingLotDTO.setEndOfTheWork(pLot.getEndOfTheWork());
         parkingLotDTO.setFreeTime(pLot.getFreeTime());
         parkingLotDTO.setParkingSpotsCount(pLot.getParkingSpots() != null ? pLot.getParkingSpots().size() : 0);
+        parkingLotDTO.setFreeParkingSpotsCount(pLot.getParkingSpots() != null ? countFreeParkingSpots(pLot.getParkingSpots()) : 0);
 
         return parkingLotDTO;
     }
@@ -79,7 +82,18 @@ public class ParkingLotService {
         parkingLotDTO.setEndOfTheWork(pLot.getEndOfTheWork());
         parkingLotDTO.setFreeTime(pLot.getFreeTime());
         parkingLotDTO.setParkingSpotsCount(pLot.getParkingSpots() != null ? pLot.getParkingSpots().size() : 0);
+        parkingLotDTO.setFreeParkingSpotsCount(pLot.getParkingSpots() != null ? countFreeParkingSpots(pLot.getParkingSpots()) : 0);
 
         return parkingLotDTO;
+    }
+
+    private int countFreeParkingSpots(List<ParkingSpot> parkingSpots) {
+        int count = 0;
+        for (int i = 0; i < parkingSpots.size(); i++) {
+            if (parkingSpots.get(i).getStatus() == 0) {
+                count++;
+            }
+        }
+        return count;
     }
 }
