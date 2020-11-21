@@ -20,8 +20,8 @@ public class Reservation {
     private int id;
     private int userId;
     private int parkingSpotId;
-    private Date reservationStart;
-    private Date reservationEnd;
+    private String reservationStart;
+    private String reservationEnd;
 
     public int getId() {
         return id;
@@ -47,19 +47,19 @@ public class Reservation {
         this.parkingSpotId = parkingSpotId;
     }
 
-    public Date getReservationStart() {
+    public String getReservationStart() {
         return reservationStart;
     }
 
-    public void setReservationStart(Date reservationStart) {
+    public void setReservationStart(String reservationStart) {
         this.reservationStart = reservationStart;
     }
 
-    public Date getReservationEnd() {
+    public String getReservationEnd() {
         return reservationEnd;
     }
 
-    public void setReservationEnd(Date reservationEnd) {
+    public void setReservationEnd(String reservationEnd) {
         this.reservationEnd = reservationEnd;
     }
 }

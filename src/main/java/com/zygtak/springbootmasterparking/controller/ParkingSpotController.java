@@ -1,5 +1,6 @@
 package com.zygtak.springbootmasterparking.controller;
 
+import com.zygtak.springbootmasterparking.dao.ParkingSpotDAO;
 import com.zygtak.springbootmasterparking.dto.ParkingSpotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
 import com.zygtak.springbootmasterparking.service.ParkingSpotService;
@@ -25,8 +26,8 @@ public class ParkingSpotController {
     }
 
     @PutMapping("/updateParkingSpot")
-    public ParkingSpotDTO updateParkingSpot(@RequestBody ParkingSpot parkingSpot) {
-        return service.updateParkingSpot(parkingSpot);
+    public ParkingSpotDTO updateParkingSpot(@RequestBody ParkingSpotDAO parkingSpotDAO) {
+        return service.updateParkingSpot(parkingSpotDAO);
     }
 }
 

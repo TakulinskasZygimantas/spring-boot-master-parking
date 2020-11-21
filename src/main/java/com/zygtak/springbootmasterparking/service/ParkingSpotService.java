@@ -1,5 +1,6 @@
 package com.zygtak.springbootmasterparking.service;
 
+import com.zygtak.springbootmasterparking.dao.ParkingSpotDAO;
 import com.zygtak.springbootmasterparking.dto.ParkingSpotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
 import com.zygtak.springbootmasterparking.repository.ParkingSpotRepository;
@@ -48,19 +49,17 @@ public class ParkingSpotService {
         return parkingSpotDTOS;
     }
 
-    public ParkingSpotDTO updateParkingSpot(ParkingSpot parkingSpot) {
-        ParkingSpot existingParkingSpot = repository.findById(parkingSpot.getId()).orElse(null);
-        existingParkingSpot.setNumber(parkingSpot.getNumber());
-        existingParkingSpot.setStatus(parkingSpot.getStatus());
-        existingParkingSpot.setParkingLot(parkingSpot.getParkingLot());
+    public ParkingSpotDTO updateParkingSpot(ParkingSpotDAO parkingSpotDAO) {
+        ParkingSpot existingParkingSpot = repository.findById(parkingSpotDAO.getId()).orElse(null);
+        existingParkingSpot.setStatus(parkingSpotDAO.getStatus());
         repository.save(existingParkingSpot);
 
         ParkingSpotDTO parkingSpotDTO = new ParkingSpotDTO();
 
-        parkingSpotDTO.setId(parkingSpot.getId());
-        parkingSpotDTO.setNumber(parkingSpot.getNumber());
-        parkingSpotDTO.setStatus(parkingSpot.getStatus());
-        parkingSpotDTO.setParkingLotId(parkingSpot.getParkingLot().getId());
+        parkingSpotDTO.setId(parkingSpotDAO.getId());
+        parkingSpotDTO.setNumber(existingParkingSpot.getNumber());
+        parkingSpotDTO.setStatus(parkingSpotDAO.getStatus());
+        parkingSpotDTO.setParkingLotId(existingParkingSpot.getParkingLot().getId());
 
         return parkingSpotDTO;
     }
