@@ -3,6 +3,7 @@ package com.zygtak.springbootmasterparking.service;
 import com.zygtak.springbootmasterparking.dao.ParkingSpotDAO;
 import com.zygtak.springbootmasterparking.dto.ParkingSpotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
+import com.zygtak.springbootmasterparking.entity.User;
 import com.zygtak.springbootmasterparking.repository.ParkingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class ParkingSpotService {
         parkingSpotDTO.setParkingLotId(parkingSpot.getParkingLot().getId());
 
         return parkingSpotDTO;
+    }
+
+    public ParkingSpot getParkingSpot(int id) {
+        return repository.findById(id).orElse(null);
     }
 
     public List<ParkingSpotDTO> getAllParkingSpotsByParkingLotId(int parkingLotId) {

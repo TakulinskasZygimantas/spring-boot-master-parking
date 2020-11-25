@@ -16,14 +16,19 @@ public class ParkingServiceService {
     @Autowired
     private ParkingLotService parkingLotService;
 
-    public ParkingServiceService(ParkingServiceRepository repository, ParkingLotService parkingLotService) {
+    @Autowired
+    private ParkingSpotService parkingSpotService;
+
+    public ParkingServiceService(ParkingServiceRepository repository, ParkingLotService parkingLotService, ParkingSpotService parkingSpotService) {
         this.repository = repository;
         this.parkingLotService = parkingLotService;
+        this.parkingSpotService = parkingSpotService;
     }
 
     public ParkingService saveParkingService(ParkingService parkingService) {
         parkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
         parkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
+        parkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
         return repository.save(parkingService);
     }
 
@@ -45,6 +50,7 @@ public class ParkingServiceService {
         existingParkingService.setParkingEnd(parkingService.getParkingEnd());
         existingParkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
         existingParkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
+        existingParkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
         return repository.save(existingParkingService);
     }
 }
