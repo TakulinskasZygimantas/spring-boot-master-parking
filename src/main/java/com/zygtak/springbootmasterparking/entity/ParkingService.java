@@ -20,6 +20,8 @@ public class ParkingService {
     private int id;
     private int userId;
     private int parkingSpotId;
+    private String parkingLotName;
+    private String parkingLotAddress;
     private String mac;
     private Date parkingStart;
     private Date parkingEnd;
@@ -70,5 +72,21 @@ public class ParkingService {
 
     public void setParkingEnd(Date parkingEnd) {
         this.parkingEnd = parkingEnd;
+    }
+
+    public String getParkingLotName() {
+        return parkingLotName;
+    }
+
+    public void setParkingLotName(String parkingLotName) {
+        this.parkingLotName = parkingLotName;
+    }
+
+    public String getParkingLotAddress() {
+        return parkingLotAddress;
+    }
+
+    public void setParkingLotAddress(String parkingLotAddress) {
+        this.parkingLotAddress = parkingLotAddress;
     }
 }

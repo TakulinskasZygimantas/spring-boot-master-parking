@@ -4,6 +4,7 @@ import com.zygtak.springbootmasterparking.dto.ParkingLotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingLot;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
 import com.zygtak.springbootmasterparking.repository.ParkingLotRepository;
+import com.zygtak.springbootmasterparking.repository.ParkingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,14 @@ import java.util.List;
 public class ParkingLotService {
 
     @Autowired
-    private ParkingLotRepository repository;
+    private ParkingLotRepository parkingLotRepository;
+
+    @Autowired
+    private ParkingSpotRepository parkingSpotRepository;
 
     public List<ParkingLotDTO> getParkingLots() {
 
-        List<ParkingLot> parkingLots = repository.findAll();
+        List<ParkingLot> parkingLots = parkingLotRepository.findAll();
 
         List<ParkingLotDTO> parkingLotDTOS = new ArrayList<>();
 
@@ -47,7 +51,7 @@ public class ParkingLotService {
 
     public ParkingLotDTO saveParkingLot(ParkingLot parkingLot) {
 
-        ParkingLot pLot = repository.save(parkingLot);
+        ParkingLot pLot = parkingLotRepository.save(parkingLot);
 
         ParkingLotDTO parkingLotDTO = new ParkingLotDTO();
 
@@ -68,7 +72,30 @@ public class ParkingLotService {
 
     public ParkingLotDTO getParkingLotById(int id) {
 
-        ParkingLot pLot = repository.findById(id).orElse(null);
+        ParkingLot pLot = parkingLotRepository.findById(id).orElse(null);
+
+        ParkingLotDTO parkingLotDTO = new ParkingLotDTO();
+
+        parkingLotDTO.setId(pLot.getId());
+        parkingLotDTO.setName(pLot.getName());
+        parkingLotDTO.setAddress(pLot.getAddress());
+        parkingLotDTO.setCoordinates(pLot.getCoordinates());
+        parkingLotDTO.setTariffDay(pLot.getTariffDay());
+        parkingLotDTO.setTariffNight(pLot.getTariffNight());
+        parkingLotDTO.setBeginningOfTheWork(pLot.getBeginningOfTheWork());
+        parkingLotDTO.setEndOfTheWork(pLot.getEndOfTheWork());
+        parkingLotDTO.setFreeTime(pLot.getFreeTime());
+        parkingLotDTO.setParkingSpotsCount(pLot.getParkingSpots() != null ? pLot.getParkingSpots().size() : 0);
+        parkingLotDTO.setFreeParkingSpotsCount(pLot.getParkingSpots() != null ? countFreeParkingSpots(pLot.getParkingSpots()) : 0);
+
+        return parkingLotDTO;
+    }
+
+    public ParkingLotDTO getParkingLotByParkingSpotId(int id) {
+
+        ParkingSpot pSpot = parkingSpotRepository.findById(id).orElse(null);
+
+        ParkingLot pLot = parkingLotRepository.findById(pSpot.getParkingLot().getId()).orElse(null);
 
         ParkingLotDTO parkingLotDTO = new ParkingLotDTO();
 

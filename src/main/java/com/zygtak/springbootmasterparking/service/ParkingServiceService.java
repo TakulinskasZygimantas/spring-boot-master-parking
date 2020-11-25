@@ -13,7 +13,17 @@ public class ParkingServiceService {
     @Autowired
     private ParkingServiceRepository repository;
 
+    @Autowired
+    private ParkingLotService parkingLotService;
+
+    public ParkingServiceService(ParkingServiceRepository repository, ParkingLotService parkingLotService) {
+        this.repository = repository;
+        this.parkingLotService = parkingLotService;
+    }
+
     public ParkingService saveParkingService(ParkingService parkingService) {
+        parkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
+        parkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
         return repository.save(parkingService);
     }
 
@@ -33,6 +43,8 @@ public class ParkingServiceService {
         existingParkingService.setMac(parkingService.getMac());
         existingParkingService.setParkingStart(parkingService.getParkingStart());
         existingParkingService.setParkingEnd(parkingService.getParkingEnd());
+        existingParkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
+        existingParkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
         return repository.save(existingParkingService);
     }
 }
