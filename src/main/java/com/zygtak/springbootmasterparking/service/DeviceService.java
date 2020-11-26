@@ -21,6 +21,10 @@ public class DeviceService {
         return repository.findById(id).orElse(null);
     }
 
+    public Device getDeviceByMac(String mac) {
+        return repository.findByMac(mac);
+    }
+
     public List<Device> getAllDevicesByUserId(int userId) {
         return repository.findAllByUserId(userId);
     }

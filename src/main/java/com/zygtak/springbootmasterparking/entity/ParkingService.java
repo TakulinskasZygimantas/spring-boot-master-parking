@@ -19,11 +19,13 @@ public class ParkingService {
     @GeneratedValue
     private int id;
     private int userId;
+    private int deviceId;
+    private String deviceName;
+    private String deviceMac;
     private int parkingSpotId;
     private String parkingLotName;
     private String parkingLotAddress;
     private int parkingSpotNumber;
-    private String mac;
     private Date parkingStart;
     private Date parkingEnd;
 
@@ -49,14 +51,6 @@ public class ParkingService {
 
     public void setParkingSpotId(int parkingSpotId) {
         this.parkingSpotId = parkingSpotId;
-    }
-
-    public String getMac() {
-        return mac;
-    }
-
-    public void setMac(String mac) {
-        this.mac = mac;
     }
 
     public Date getParkingStart() {
@@ -97,5 +91,29 @@ public class ParkingService {
 
     public void setParkingSpotNumber(int parkingSpotNumber) {
         this.parkingSpotNumber = parkingSpotNumber;
+    }
+
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getDeviceMac() {
+        return deviceMac;
+    }
+
+    public void setDeviceMac(String deviceMac) {
+        this.deviceMac = deviceMac;
     }
 }
