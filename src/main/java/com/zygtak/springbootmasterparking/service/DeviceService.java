@@ -4,7 +4,6 @@ import com.zygtak.springbootmasterparking.entity.Device;
 import com.zygtak.springbootmasterparking.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -14,7 +13,13 @@ public class DeviceService {
     private DeviceRepository repository;
 
     public Device saveDevice(Device device) {
-        return repository.save(device);
+        if (getDeviceByMac(device.getMac()) != null) {
+            device.setId(getDeviceByMac(device.getMac()).getId());
+            return updateDevice(device);
+        }
+        else {
+            return repository.save(device);
+        }
     }
 
     public Device getDeviceById(int id) {

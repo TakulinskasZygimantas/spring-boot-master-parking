@@ -46,6 +46,10 @@ public class ParkingServiceService {
         return repository.save(parkingService);
     }
 
+    public ParkingService getParkingServiceById(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
     public List<ParkingService> getAllParkingServicesByUserId(int userId) {
         return repository.findAllByUserId(userId);
     }

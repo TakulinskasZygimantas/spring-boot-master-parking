@@ -18,6 +18,11 @@ public class ParkingServiceController {
         return service.saveParkingService(parkingService);
     }
 
+    @GetMapping("/parkingServiceById/{id}")
+    public ParkingService getParkingServiceById(@PathVariable int id) {
+        return service.getParkingServiceById(id);
+    }
+
     @GetMapping("/allParkingServicesByUserId/{userId}")
     public List<ParkingService> getAllParkingServicesByUserId(@PathVariable int userId) {
         return service.getAllParkingServicesByUserId(userId);
