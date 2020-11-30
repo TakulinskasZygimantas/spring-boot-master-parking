@@ -1,11 +1,15 @@
 package com.zygtak.springbootmasterparking.service;
 
+import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
+import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
 import com.zygtak.springbootmasterparking.repository.ParkingServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class ParkingServiceService {
@@ -75,5 +79,55 @@ public class ParkingServiceService {
         existingParkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
 
         return repository.save(existingParkingService);
+    }
+
+    public List<HistoryWeekDay> getHistoryOfWeekDays() {
+        DateFormat format = new SimpleDateFormat("EEEE");
+
+        List<String> listOfWords = new ArrayList<String>();
+        List<HistoryWeekDay> historyWeekDays = new ArrayList<>();
+        List<ParkingService> parkingServices = repository.findAll();
+
+        for (int i = 0; i < parkingServices.size(); i++) {
+            listOfWords.add(format.format(parkingServices.get(i).getParkingStart()));
+        }
+
+        Set<String> unique = new HashSet<>(listOfWords);
+        for (String key : unique) {
+            historyWeekDays.add(new HistoryWeekDay(key, Collections.frequency(
+                    listOfWords,
+                    key
+            )));
+        }
+
+        return historyWeekDays;
+    }
+
+    public List<HistoryParkingSpot> getHistoryOfParkingSpots() {
+
+        boolean notExist = false;
+        List<HistoryParkingSpot> historyParkingSpots = new ArrayList<>();
+        List<ParkingService> parkingServices = repository.findAll();
+
+        for (int i = 0; i < parkingServices.size() ; i++) {
+            if (historyParkingSpots.size() > 0) {
+                for (int j = 0; j < historyParkingSpots.size(); j++) {
+
+                    if (historyParkingSpots.get(j).getParkingSpot() == parkingServices.get(i).getParkingSpotNumber()) {
+                        historyParkingSpots.get(j).setCountService(historyParkingSpots.get(j).getCountService() + 1);
+                        notExist = true;
+                        break;
+                    }
+                }
+                if (!notExist) {
+                    historyParkingSpots.add(new HistoryParkingSpot(parkingServices.get(i).getParkingSpotNumber(), 1));
+                    notExist = false;
+                }
+            }
+            else {
+                historyParkingSpots.add(new HistoryParkingSpot(parkingServices.get(i).getParkingSpotNumber(), 1));
+            }
+        }
+        return historyParkingSpots;
     }
 }

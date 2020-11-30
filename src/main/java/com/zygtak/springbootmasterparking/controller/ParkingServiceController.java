@@ -1,5 +1,7 @@
 package com.zygtak.springbootmasterparking.controller;
 
+import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
+import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
 import com.zygtak.springbootmasterparking.service.ParkingServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,16 @@ public class ParkingServiceController {
     @GetMapping("/allParkingServicesByUserId/{userId}")
     public List<ParkingService> getAllParkingServicesByUserId(@PathVariable int userId) {
         return service.getAllParkingServicesByUserId(userId);
+    }
+
+    @GetMapping("/getHistoryOfWeekDays")
+    public List<HistoryWeekDay> getHistoryOfWeekDays() {
+        return service.getHistoryOfWeekDays();
+    }
+
+    @GetMapping("/getHistoryOfParkingSpots")
+    public List<HistoryParkingSpot> getHistoryOfParkingSpots() {
+        return service.getHistoryOfParkingSpots();
     }
 
     @PutMapping("/updateParkingService")
