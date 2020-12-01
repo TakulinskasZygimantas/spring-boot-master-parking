@@ -1,5 +1,6 @@
 package com.zygtak.springbootmasterparking.controller;
 
+import com.zygtak.springbootmasterparking.dto.HistoryHour;
 import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
 import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
@@ -38,6 +39,11 @@ public class ParkingServiceController {
     @GetMapping("/getHistoryOfParkingSpots")
     public List<HistoryParkingSpot> getHistoryOfParkingSpots() {
         return service.getHistoryOfParkingSpots();
+    }
+
+    @GetMapping("/getBusiestHours")
+    public List<HistoryHour> getBusiestHours() {
+        return service.getBusiestHours();
     }
 
     @PutMapping("/updateParkingService")

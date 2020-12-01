@@ -1,15 +1,16 @@
 package com.zygtak.springbootmasterparking.service;
 
+import com.zygtak.springbootmasterparking.dto.HistoryHour;
 import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
 import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
 import com.zygtak.springbootmasterparking.repository.ParkingServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Service
 public class ParkingServiceService {
@@ -129,5 +130,41 @@ public class ParkingServiceService {
             }
         }
         return historyParkingSpots;
+    }
+
+    public List<HistoryHour> getBusiestHours() {
+
+        DateFormat format = new SimpleDateFormat("HH");
+
+        List<Integer> listOfHours = new ArrayList<Integer>();
+
+        List<HistoryHour> historyHours = new ArrayList<>();
+        List<ParkingService> parkingServices = repository.findAll();
+
+        for (int i = 0; i < parkingServices.size(); i++) {
+            // gets range of hours
+            IntStream.rangeClosed(
+                    Integer.parseInt(
+                            format.format(parkingServices.get(i).getParkingStart()) // converts DateTime to hours
+                    ),
+                    Integer.parseInt(
+                            format.format(parkingServices.get(i).getParkingEnd())
+                    ))
+                    .forEach(no -> {
+                        listOfHours.add(no);
+            });
+        }
+
+        // finds unique hours and counts it
+        Set<Integer> uniqueStart = new HashSet<>(listOfHours);
+        for (Integer key : uniqueStart) {
+            historyHours.add(
+                    new HistoryHour(key, Collections.frequency(
+                    listOfHours,
+                    key
+            )));
+        }
+
+        return historyHours;
     }
 }

@@ -3,7 +3,6 @@ package com.zygtak.springbootmasterparking.service;
 import com.zygtak.springbootmasterparking.dao.ParkingSpotDAO;
 import com.zygtak.springbootmasterparking.dto.ParkingSpotDTO;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
-import com.zygtak.springbootmasterparking.entity.User;
 import com.zygtak.springbootmasterparking.repository.ParkingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
