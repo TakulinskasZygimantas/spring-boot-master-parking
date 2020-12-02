@@ -85,20 +85,27 @@ public class ParkingServiceService {
     public List<HistoryWeekDay> getHistoryOfWeekDays() {
         DateFormat format = new SimpleDateFormat("EEEE");
 
-        List<String> listOfWords = new ArrayList<String>();
-        List<HistoryWeekDay> historyWeekDays = new ArrayList<>();
         List<ParkingService> parkingServices = repository.findAll();
 
-        for (int i = 0; i < parkingServices.size(); i++) {
-            listOfWords.add(format.format(parkingServices.get(i).getParkingStart()));
-        }
+        List<String> listOfWords = new ArrayList<String>();
+        List<HistoryWeekDay> historyWeekDays = new ArrayList<>();
 
-        Set<String> unique = new HashSet<>(listOfWords);
-        for (String key : unique) {
-            historyWeekDays.add(new HistoryWeekDay(key, Collections.frequency(
-                    listOfWords,
-                    key
-            )));
+        if (parkingServices != null) {
+            for (int i = 0; i < parkingServices.size(); i++) {
+                try {
+                    listOfWords.add(format.format(parkingServices.get(i).getParkingStart()));
+                }
+                catch (Exception e) {
+                    listOfWords.add(e.toString());
+                }
+            }
+            Set<String> unique = new HashSet<>(listOfWords);
+            for (String key : unique) {
+                historyWeekDays.add(new HistoryWeekDay(key, Collections.frequency(
+                        listOfWords,
+                        key
+                )));
+            }
         }
 
         return historyWeekDays;
@@ -158,13 +165,14 @@ public class ParkingServiceService {
         // finds unique hours and counts it
         Set<Integer> uniqueStart = new HashSet<>(listOfHours);
         for (Integer key : uniqueStart) {
-            historyHours.add(
-                    new HistoryHour(key, Collections.frequency(
-                    listOfHours,
-                    key
-            )));
+            if (historyHours.size() < 5) {
+                historyHours.add(
+                        new HistoryHour(key, Collections.frequency(
+                                listOfHours,
+                                key
+                        )));
+            }
         }
-
         return historyHours;
     }
 }

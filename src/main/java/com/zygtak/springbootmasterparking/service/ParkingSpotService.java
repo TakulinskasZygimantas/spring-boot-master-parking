@@ -2,12 +2,18 @@ package com.zygtak.springbootmasterparking.service;
 
 import com.zygtak.springbootmasterparking.dao.ParkingSpotDAO;
 import com.zygtak.springbootmasterparking.dto.ParkingSpotDTO;
+import com.zygtak.springbootmasterparking.dto.ParkingSpotsPercentage;
 import com.zygtak.springbootmasterparking.entity.ParkingSpot;
+import com.zygtak.springbootmasterparking.entity.ServiceResponse;
 import com.zygtak.springbootmasterparking.repository.ParkingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Double.parseDouble;
 
 @Service
 public class ParkingSpotService {
@@ -66,5 +72,66 @@ public class ParkingSpotService {
         parkingSpotDTO.setParkingLotId(existingParkingSpot.getParkingLot().getId());
 
         return parkingSpotDTO;
+    }
+
+    public ServiceResponse<ParkingSpotsPercentage> getParkingSpotsBusynessByParkingLotId(int parkingLotId) {
+        String message = "OK";
+        boolean success = true;
+
+        ServiceResponse<ParkingSpotsPercentage> serviceResponse = new ServiceResponse<ParkingSpotsPercentage>();
+
+        DecimalFormat df = new DecimalFormat("0.0");
+
+        ParkingSpotsPercentage parkingSpotsPercentage = new ParkingSpotsPercentage();
+        List<ParkingSpot> parkingSpots = repository.findAllByParkingLotId(parkingLotId);
+
+        if (parkingSpots.size() > 0) {
+            for (int i = 0; i < parkingSpots.size(); i++) {
+                switch (parkingSpots.get(i).getStatus()) {
+                    case 0:
+                        parkingSpotsPercentage.setFreePercentage(
+                                parkingSpotsPercentage.getFreePercentage() + 1
+                        );
+                        break;
+                    case 1:
+                        parkingSpotsPercentage.setReservedPercentage(
+                                parkingSpotsPercentage.getReservedPercentage() + 1
+                        );
+                        break;
+                    case 2:
+                        parkingSpotsPercentage.setBusyPercentage(
+                                parkingSpotsPercentage.getBusyPercentage() + 1
+                        );
+                        break;
+                    default:
+                        message = "Where is no parking spot status: " + parkingSpots.get(i).getStatus();
+                        success = false;
+                        break;
+                }
+            }
+
+
+            parkingSpotsPercentage.setFreePercentage(
+                    parseDouble(
+                            df.format((parkingSpotsPercentage.getFreePercentage() * 100) / parkingSpots.size())));
+
+            parkingSpotsPercentage.setReservedPercentage(
+                    parseDouble(
+                            df.format((parkingSpotsPercentage.getReservedPercentage() * 100) / parkingSpots.size())));
+
+            parkingSpotsPercentage.setBusyPercentage(
+                    parseDouble(
+                            df.format((parkingSpotsPercentage.getBusyPercentage() * 100) / parkingSpots.size())));
+        }
+        else {
+            message = "Where is no parking spots to count";
+            success = false;
+        }
+
+        serviceResponse.setSuccess(success);
+        serviceResponse.setData(parkingSpotsPercentage);
+        serviceResponse.setMessage(message);
+
+        return serviceResponse;
     }
 }
