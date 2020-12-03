@@ -1,9 +1,6 @@
 package com.zygtak.springbootmasterparking.service;
 
-import com.zygtak.springbootmasterparking.dto.HistoryHour;
-import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
-import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
-import com.zygtak.springbootmasterparking.dto.ParkingSpotsPercentage;
+import com.zygtak.springbootmasterparking.dto.*;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
 import com.zygtak.springbootmasterparking.entity.ServiceResponse;
 import com.zygtak.springbootmasterparking.repository.ParkingServiceRepository;
@@ -113,6 +110,45 @@ public class ParkingServiceService {
         }
 
         return historyWeekDays;
+    }
+
+    public HistoryWeek getHistoryOfWeek() {
+        DateFormat format = new SimpleDateFormat("EEEE");
+
+        List<ParkingService> parkingServices = repository.findAll();
+
+        HistoryWeek historyWeek = new HistoryWeek();
+
+
+        if (parkingServices != null) {
+            for (int i = 0; i < parkingServices.size(); i++) {
+
+                switch(format.format(parkingServices.get(i).getParkingStart())) {
+                    case "Monday":
+                        historyWeek.setMonday(historyWeek.getMonday() + 1);
+                        break;
+                    case "Tuesday":
+                        historyWeek.setTuesday(historyWeek.getTuesday() + 1);
+                        break;
+                    case "Wednesday":
+                        historyWeek.setWednesday(historyWeek.getWednesday() + 1);
+                        break;
+                    case "Thursday":
+                        historyWeek.setThursday(historyWeek.getThursday() + 1);
+                        break;
+                    case "Friday":
+                        historyWeek.setFriday(historyWeek.getFriday() + 1);
+                        break;
+                    case "Saturday":
+                        historyWeek.setSaturday(historyWeek.getSaturday() + 1);
+                        break;
+                    case "Sunday":
+                        historyWeek.setSunday(historyWeek.getSunday() + 1);
+                        break;
+                }
+            }
+        }
+        return historyWeek;
     }
 
     public List<HistoryParkingSpot> getHistoryOfParkingSpots() {
