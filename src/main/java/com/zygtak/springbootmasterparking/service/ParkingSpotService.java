@@ -110,7 +110,6 @@ public class ParkingSpotService {
                 }
             }
 
-
             parkingSpotsPercentage.setFreePercentage(
                     parseDouble(
                             df.format((parkingSpotsPercentage.getFreePercentage() * 100) / parkingSpots.size())));

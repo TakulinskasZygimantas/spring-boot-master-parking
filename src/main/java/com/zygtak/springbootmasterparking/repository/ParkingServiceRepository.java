@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ParkingServiceRepository extends JpaRepository<ParkingService, Integer> {
     List<ParkingService> findAllByUserId(int userId);
+
+    List<ParkingService> findAllByParkingLotId(int parkingLotId);
 }

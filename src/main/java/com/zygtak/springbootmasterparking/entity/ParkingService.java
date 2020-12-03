@@ -3,7 +3,6 @@ package com.zygtak.springbootmasterparking.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,6 +22,7 @@ public class ParkingService {
     private String deviceName;
     private String deviceMac;
     private int parkingSpotId;
+    private int parkingLotId;
     private String parkingLotName;
     private String parkingLotAddress;
     private int parkingSpotNumber;
@@ -115,5 +115,13 @@ public class ParkingService {
 
     public void setDeviceMac(String deviceMac) {
         this.deviceMac = deviceMac;
+    }
+
+    public int getParkingLotId() {
+        return parkingLotId;
+    }
+
+    public void setParkingLotId(int parkingLotId) {
+        this.parkingLotId = parkingLotId;
     }
 }

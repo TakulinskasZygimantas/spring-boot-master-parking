@@ -3,7 +3,9 @@ package com.zygtak.springbootmasterparking.service;
 import com.zygtak.springbootmasterparking.dto.HistoryHour;
 import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
 import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
+import com.zygtak.springbootmasterparking.dto.ParkingSpotsPercentage;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
+import com.zygtak.springbootmasterparking.entity.ServiceResponse;
 import com.zygtak.springbootmasterparking.repository.ParkingServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,7 @@ public class ParkingServiceService {
     }
 
     public ParkingService saveParkingService(ParkingService parkingService) {
+        parkingService.setParkingLotId(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getId());
         parkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
         parkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
         parkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
@@ -75,6 +78,7 @@ public class ParkingServiceService {
         existingParkingService.setParkingSpotId(parkingService.getParkingSpotId());
         existingParkingService.setParkingStart(parkingService.getParkingStart());
         existingParkingService.setParkingEnd(parkingService.getParkingEnd());
+        existingParkingService.setParkingLotId(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getId());
         existingParkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
         existingParkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
         existingParkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
@@ -139,40 +143,57 @@ public class ParkingServiceService {
         return historyParkingSpots;
     }
 
-    public List<HistoryHour> getBusiestHours() {
+    public ServiceResponse<List<HistoryHour>> getBusiestHours(int parkingLotId) {
+        String message = "OK";
+        boolean success = true;
+
+        ServiceResponse<List<HistoryHour>> serviceResponse = new ServiceResponse<List<HistoryHour>>();
 
         DateFormat format = new SimpleDateFormat("HH");
 
         List<Integer> listOfHours = new ArrayList<Integer>();
-
         List<HistoryHour> historyHours = new ArrayList<>();
-        List<ParkingService> parkingServices = repository.findAll();
+        List<ParkingService> parkingServices = repository.findAllByParkingLotId(parkingLotId);
 
-        for (int i = 0; i < parkingServices.size(); i++) {
-            // gets range of hours
-            IntStream.rangeClosed(
-                    Integer.parseInt(
-                            format.format(parkingServices.get(i).getParkingStart()) // converts DateTime to hours
-                    ),
-                    Integer.parseInt(
-                            format.format(parkingServices.get(i).getParkingEnd())
-                    ))
-                    .forEach(no -> {
-                        listOfHours.add(no);
-            });
-        }
+        if (parkingServices.size() > 0) {
+            for (int i = 0; i < parkingServices.size(); i++) {
+                // gets range of hours
+                IntStream.rangeClosed(
+                        Integer.parseInt(
+                                format.format(parkingServices.get(i).getParkingStart()) // converts DateTime to hours
+                        ),
+                        Integer.parseInt(
+                                format.format(parkingServices.get(i).getParkingEnd())
+                        ))
+                        .forEach(no -> {
+                            listOfHours.add(no);
+                        });
+            }
 
-        // finds unique hours and counts it
-        Set<Integer> uniqueStart = new HashSet<>(listOfHours);
-        for (Integer key : uniqueStart) {
+            // finds unique hours and counts it
+            Set<Integer> uniqueStart = new HashSet<>(listOfHours);
+            for (Integer key : uniqueStart) {
+                if (historyHours.size() < 5) {
+                    historyHours.add(
+                            new HistoryHour(key, Collections.frequency(
+                                    listOfHours,
+                                    key
+                            )));
+                }
+            }
             if (historyHours.size() < 5) {
-                historyHours.add(
-                        new HistoryHour(key, Collections.frequency(
-                                listOfHours,
-                                key
-                        )));
+                message = historyHours.size() + " is not enough data for research";
             }
         }
-        return historyHours;
+        else {
+            message = "Where is no services in this parking lot";
+            success = false;
+        }
+
+        serviceResponse.setSuccess(success);
+        serviceResponse.setData(historyHours);
+        serviceResponse.setMessage(message);
+
+        return serviceResponse;
     }
 }

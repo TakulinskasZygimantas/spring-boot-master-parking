@@ -4,6 +4,7 @@ import com.zygtak.springbootmasterparking.dto.HistoryHour;
 import com.zygtak.springbootmasterparking.dto.HistoryParkingSpot;
 import com.zygtak.springbootmasterparking.dto.HistoryWeekDay;
 import com.zygtak.springbootmasterparking.entity.ParkingService;
+import com.zygtak.springbootmasterparking.entity.ServiceResponse;
 import com.zygtak.springbootmasterparking.service.ParkingServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +42,9 @@ public class ParkingServiceController {
         return service.getHistoryOfParkingSpots();
     }
 
-    @GetMapping("/getBusiestHours")
-    public List<HistoryHour> getBusiestHours() {
-        return service.getBusiestHours();
+    @GetMapping("/getBusiestHours/{id}")
+    public ServiceResponse<List<HistoryHour>> getBusiestHours(@PathVariable int id) {
+        return service.getBusiestHours(id);
     }
 
     @PutMapping("/updateParkingService")
