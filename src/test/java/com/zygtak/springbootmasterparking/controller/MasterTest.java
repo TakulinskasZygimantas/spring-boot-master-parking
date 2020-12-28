@@ -47,9 +47,9 @@ class MasterTest {
 
 
                 //check the return value
-                .andExpect(jsonPath("$.data.freePercentage").value(12.2))
+                .andExpect(jsonPath("$.data.freePercentage").value(13.5))
                 .andExpect(jsonPath("$.data.busyPercentage").value(75.7))
-                .andExpect(jsonPath("$.data.reservedPercentage").value(12.2))
+                .andExpect(jsonPath("$.data.reservedPercentage").value(10.8))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("OK"));
     }

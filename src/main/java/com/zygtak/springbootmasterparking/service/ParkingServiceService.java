@@ -217,7 +217,7 @@ public class ParkingServiceService {
                             )));
                 }
             }
-            if (historyHours.size() < 5) {
+            if (historyHours.size() < 15) {
                 message = historyHours.size() + " is not enough data for research";
             }
         }
