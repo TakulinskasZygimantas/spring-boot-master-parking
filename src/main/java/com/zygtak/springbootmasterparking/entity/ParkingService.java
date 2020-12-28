@@ -24,6 +24,7 @@ public class ParkingService {
     private int parkingSpotId;
     private int parkingLotId;
     private String parkingLotName;
+    private double parkingLotTariff;
     private String parkingLotAddress;
     private int parkingSpotNumber;
     private Date parkingStart;
@@ -123,5 +124,13 @@ public class ParkingService {
 
     public void setParkingLotId(int parkingLotId) {
         this.parkingLotId = parkingLotId;
+    }
+
+    public double getParkingLotTariff() {
+        return parkingLotTariff;
+    }
+
+    public void setParkingLotTariff(double parkingLotTariff) {
+        this.parkingLotTariff = parkingLotTariff;
     }
 }

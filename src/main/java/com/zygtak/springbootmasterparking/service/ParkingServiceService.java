@@ -77,6 +77,7 @@ public class ParkingServiceService {
         existingParkingService.setParkingEnd(parkingService.getParkingEnd());
         existingParkingService.setParkingLotId(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getId());
         existingParkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
+        existingParkingService.setParkingLotTariff(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getTariffDay());
         existingParkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
         existingParkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
 
