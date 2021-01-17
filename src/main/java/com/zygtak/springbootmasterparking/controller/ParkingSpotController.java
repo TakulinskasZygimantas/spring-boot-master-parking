@@ -37,4 +37,3 @@ public class ParkingSpotController {
         return service.getParkingSpotsBusynessByParkingLotId(parkingLotId);
     }
 }
-

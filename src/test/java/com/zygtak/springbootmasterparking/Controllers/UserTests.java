@@ -46,7 +46,5 @@ class UserTests {
 
         Mockito.verify(userRepository).findAll();
     }
-
-
 }
 

@@ -23,6 +23,11 @@ public class ParkingServiceController {
         return service.saveParkingService(parkingService);
     }
 
+    @PostMapping("/addParkingServiceNew")
+    public ParkingService addParkingServiceNew(@RequestBody ParkingService parkingService) {
+        return service.saveParkingServiceNew(parkingService);
+    }
+
     @GetMapping("/parkingServiceById/{id}")
     public ParkingService getParkingServiceById(@PathVariable int id) {
         return service.getParkingServiceById(id);

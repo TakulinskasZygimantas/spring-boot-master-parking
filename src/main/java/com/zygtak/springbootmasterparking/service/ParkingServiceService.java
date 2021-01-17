@@ -51,12 +51,42 @@ public class ParkingServiceService {
         return repository.save(parkingService);
     }
 
+    public ParkingService saveParkingServiceNew(ParkingService parkingService) {
+
+        ParkingService existingParkingService = getParkingServiceByDeviceMac(parkingService.getDeviceMac(), null);
+        if (existingParkingService == null) {
+            parkingService.setParkingLotId(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getId());
+            parkingService.setParkingLotName(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getName());
+            parkingService.setParkingLotAddress(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getAddress());
+            parkingService.setParkingSpotNumber(parkingSpotService.getParkingSpot(parkingService.getParkingSpotId()).getNumber());
+            parkingService.setParkingLotTariff(parkingLotService.getParkingLotByParkingSpotId(parkingService.getParkingSpotId()).getTariffDay());
+
+            parkingService.setParkingStart(Calendar.getInstance().getTime());
+
+            parkingService.setUserId(deviceService.getDeviceByMac(parkingService.getDeviceMac()).getUserId());
+            parkingService.setDeviceId(deviceService.getDeviceByMac(parkingService.getDeviceMac()).getId());
+            parkingService.setDeviceName(deviceService.getDeviceByMac(parkingService.getDeviceMac()).getName());
+
+            return repository.save(parkingService);
+        }
+        else {
+            existingParkingService.setParkingEnd(Calendar.getInstance().getTime());
+            return repository.save(existingParkingService);
+        }
+    }
+
     public ParkingService getParkingServiceById(int id) {
         return repository.findById(id).orElse(null);
     }
 
     public List<ParkingService> getAllParkingServicesByUserId(int userId) {
-        return repository.findAllByUserId(userId);
+        List<ParkingService> parkingServices = repository.findAllByUserId(userId);
+        Collections.reverse(parkingServices);
+        return parkingServices;
+    }
+
+    public ParkingService getParkingServiceByDeviceMac(String deviceMac, Date parkingEnd) {
+        return repository.findByDeviceMacAndParkingEnd(deviceMac, parkingEnd);
     }
 
     public String deleteParkingService(int id) {

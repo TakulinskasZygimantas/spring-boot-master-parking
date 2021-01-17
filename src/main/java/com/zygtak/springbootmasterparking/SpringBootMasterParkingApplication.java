@@ -9,5 +9,4 @@ public class SpringBootMasterParkingApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMasterParkingApplication.class, args);
     }
-
 }
